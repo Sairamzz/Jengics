@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<robot name="jenga_block" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <material name="red">
+        <color rgba="1 0 0 1"/>
+    </material>
+    
+    <material name="green">
+        <color rgba="0 1 0 1"/>
+    </material>
+
+    <link name="base_link" />
+
+    <joint name="base_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="jenga_base_link"/>
+    </joint>
+
+    <link name="jenga_base_link">
+        <visual>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <box size="0.75 0.75 0.05"/>
+            </geometry>
+            <material name="red" />
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <box size="0.75 0.75 0.05"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0 0 0" />
+            <mass value="1.4"/>
+            <inertia ixx="0.06591666666666665" ixy="0" ixz="0" iyy="0.06591666666666665" iyz="0" izz="0.13124999999999998"/>
+        </inertial>
+    </link>
+
+    <joint name="base_rotation_joint" type="continuous">
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+        <parent link="jenga_base_link"/>
+        <child link="jenga_rotator_link"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="1.0" velocity="0.01"/>
+        <dynamics damping="0.05" friction="0.1"/>
+    </joint>
+
+    <link name="jenga_rotator_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.1" length="0.02"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.1" length="0.02"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.03"/>
+            <inertia ixx="7.6e-5" ixy="0.0" ixz="0.0" iyy="7.6e-5" iyz="0.0" izz="0.00015000000000000001"/>
+        </inertial>
+    </link>
+
+    <gazebo reference="jenga_base_link">
+        <material>Gazebo/Red</material>
+        <gravity>true</gravity>
+        <mu1>0.7</mu1>
+        <mu2>0.7</mu2>
+        <!-- <dampingFactor>0.7</dampingFactor> -->
+        <kp>50000</kp> <!--contact stiffness -->
+        <kd>5000</kd> <!-- contact damping -->
+    </gazebo>
+
+
+    <gazebo reference="jenga_rotator_link">
+        <material>Gazebo/Green</material>
+        <gravity>true</gravity>
+        <mu1>0.8</mu1>
+        <mu2>0.8</mu2>
+        <kp>50000</kp>
+        <kd>5000</kd>
+    </gazebo>
+    
+
+
+    <ros2_control name="GazeboSystem" type="system">
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        <joint name="base_rotation_joint">
+            <command_interface name="effort" />
+            <state_interface name="velocity" />
+        </joint>
+    </ros2_control>
+
+    <gazebo>
+        <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+            <parameters>$(find jenga_blocks)/config/base_controllers.yaml</parameters>
+            <ros>
+                <remapping>/joint_effort_controller/commands:=/base_rotator</remapping>
+            </ros>
+        </plugin>
+        
+    </gazebo>
+
+</robot>
+
+
