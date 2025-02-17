@@ -21,7 +21,6 @@ class Wx250sArmController(Node):
         )
 
         # Movement positions
-        # joint angles for each joint
         self.positions_list = [
             [0.5, -1.0, 1.0, -0.5, 0.3, 1.5],  # Position 1
             [-0.5, 1.0, -1.0, 0.5, -0.3, -1.5]  # Position 2
