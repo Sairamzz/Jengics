@@ -1,7 +1,6 @@
 # Jengics
-# Hi & Hello
 
-# 2 Packages below
+# Packages manual below
 ## jenga_blocks
 It contains 2 packages 
 - jenga_blocks

@@ -4,6 +4,8 @@ from control_msgs.msg import JointTrajectoryControllerState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 
+from jacobian import inverse_kinematics
+
 class Wx250sArmController(Node):
     def __init__(self, target_position, movement_time, velocity=None, acceleration=None):
         super().__init__('wx250s_arm_control')
@@ -53,10 +55,12 @@ class Wx250sArmController(Node):
 
 def main():
     rclpy.init()
-    target_position = [0.5, 1.0, -1.0, 0.5, -0.3, -1.5]
-    movement_time = 2
-    velocity = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-    acceleration = [0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
+
+    x = 1
+    y = 1
+    z = 1
+
+    target_position, movement_time, velocity, acceleration = inverse_kinematics(x, y, z)
     
     node = Wx250sArmController(target_position, movement_time, velocity, acceleration)
     rclpy.spin(node)
