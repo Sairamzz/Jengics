@@ -1,0 +1,1 @@
+# TODO: we have arm length, their rotation limits, we want to find Jacobian to find out joint angles and give out to our class in `arm_control.py`
