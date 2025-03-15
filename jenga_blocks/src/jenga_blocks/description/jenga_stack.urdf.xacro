@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="jenga_stack" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Include Base -->
+    <xacro:include filename="$(find jenga_blocks)/description/jenga_base.urdf.xacro"/>
+    
+    <!-- Include Jenga Block Macro -->
+    <xacro:include filename="$(find jenga_blocks)/description/jenga_block.urdf.xacro"/>
+
+    <!-- Spawn Multiple Blocks -->
+    <xacro:jenga_block name="block1" x="0.0" y="0.0" z="0.05"/>
+    <xacro:jenga_block name="block2" x="0.1" y="0.0" z="0.05"/>
+    <xacro:jenga_block name="block3" x="-0.1" y="0.0" z="0.05"/>
+    <xacro:jenga_block name="block4" x="0.0" y="0.1" z="0.1"/>
+    <xacro:jenga_block name="block5" x="0.1" y="0.1" z="0.1"/>
+    <xacro:jenga_block name="block6" x="-0.1" y="0.1" z="0.1"/>
+
+</robot>
