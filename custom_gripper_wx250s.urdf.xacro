@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="custom_h_gripper">
+
+  <!-- LEFT FINGER - shaped like lowercase "h" -->
+  <link name="left_finger_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.01 0.08"/> <!-- vertical bar -->
+      </geometry>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <material name="Gazebo/Wood"/>
+    </visual>
+
+    <visual>
+      <geometry>
+        <box size="0.03 0.01 0.01"/> <!-- horizontal arch -->
+      </geometry>
+      <origin xyz="0.015 0 0.07" rpy="0 0 0"/>
+      <material name="Gazebo/Wood"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.02 0.01 0.08"/>
+      </geometry>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+    </collision>
+
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="1e-4" ixy="0.0" ixz="0.0"
+               iyy="1e-4" iyz="0.0"
+               izz="1e-4"/>
+    </inertial>
+  </link>
+
+  <!-- RIGHT FINGER - mirror of "h" -->
+  <link name="right_finger_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.01 0.08"/>
+      </geometry>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <material name="Gazebo/Wood"/>
+    </visual>
+
+    <visual>
+      <geometry>
+        <box size="0.03 0.01 0.01"/>
+      </geometry>
+      <origin xyz="-0.015 0 0.07" rpy="0 0 0"/>
+      <material name="Gazebo/Wood"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.02 0.01 0.08"/>
+      </geometry>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+    </collision>
+
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="1e-4" ixy="0.0" ixz="0.0"
+               iyy="1e-4" iyz="0.0"
+               izz="1e-4"/>
+    </inertial>
+  </link>
+
+  <!-- JOINTS: attach to ee_arm_link -->
+  <joint name="left_gripper_joint" type="fixed">
+    <parent link="ee_arm_link"/>
+    <child link="left_finger_link"/>
+    <origin xyz="0.03 0.03 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="right_gripper_joint" type="fixed">
+    <parent link="ee_arm_link"/>
+    <child link="right_finger_link"/>
+    <origin xyz="0.03 -0.03 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- GAZEBO PHYSICS for grippy fingers -->
+  <gazebo reference="left_finger_link">
+    <material>Gazebo/Wood</material>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2.0</mu>
+          <mu2>2.0</mu2>
+        </ode>
+      </friction>
+      <contact>
+        <ode>
+          <kp>1000000</kp>
+          <kd>10000</kd>
+          <soft_erp>0.9</soft_erp>
+          <soft_cfm>0.0</soft_cfm>
+        </ode>
+      </contact>
+    </surface>
+  </gazebo>
+
+  <gazebo reference="right_finger_link">
+    <material>Gazebo/Wood</material>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2.0</mu>
+          <mu2>2.0</mu2>
+        </ode>
+      </friction>
+      <contact>
+        <ode>
+          <kp>1000000</kp>
+          <kd>10000</kd>
+          <soft_erp>0.9</soft_erp>
+          <soft_cfm>0.0</soft_cfm>
+        </ode>
+      </contact>
+    </surface>
+  </gazebo>
+
+</robot>

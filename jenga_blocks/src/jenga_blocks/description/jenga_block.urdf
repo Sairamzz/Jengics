@@ -31,7 +31,7 @@
         </collision>
 
         <inertial>
-            <origin xyz="0 0 0" />
+            <origin xyz="0 0 -0.0001" />
             <mass value="0.002"/>
             <inertia ixx="1.4166666666666668e-07" ixy="0" ixz="0"
                     iyy="9.75e-07" iyz="0"
@@ -39,22 +39,42 @@
         </inertial>
     </link>
 
-    <!-- Gazebo physics properties -->
-    <gazebo reference="jenga_block">
-        <material>Gazebo/Blue
-            <script>
-                <uri>model://jenga_block/materials/scripts</uri>
-                <name>Jenga/CatTexture</name>
-            </script>
-        </material>
-        <gravity>true</gravity>
-        <mu1>0.7</mu1>
-        <mu2>0.7</mu2>
-        <!-- <dampingFactor>1</dampingFactor> -->
-        <kp>50000</kp> <!--contact stiffness -->
-        <kd>2000</kd> <!-- contact damping -->
-        
+<gazebo reference="jenga_block">
+    <material>Gazebo/Wood</material>
+    <gravity>true</gravity>
 
-    </gazebo>
+    <!-- Contact stiffness -->
+    <kp>1e6</kp>
+    <kd>1e4</kd>
+
+    <surface>
+        <friction>
+            <ode>
+                <mu>1.5</mu>         <!-- Increase friction -->
+                <mu2>1.5</mu2>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
+            </ode>
+        </friction>
+
+        <bounce>
+            <restitution_coefficient>0.0</restitution_coefficient>
+            <threshold>1.0</threshold>
+        </bounce>
+
+        <contact>
+            <ode>
+                <soft_cfm>0.0</soft_cfm>       <!-- Make it hard -->
+                <soft_erp>0.9</soft_erp>       <!-- High ERP means less "squish" -->
+                <kp>1e6</kp>                   <!-- High stiffness -->
+                <kd>1e4</kd>                   <!-- High damping -->
+                <max_vel>0.01</max_vel>
+                <min_depth>0.001</min_depth>
+            </ode>
+        </contact>
+    </surface>
+</gazebo>
+
+
 
 </robot>

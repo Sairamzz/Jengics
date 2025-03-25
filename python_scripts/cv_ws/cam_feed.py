@@ -2,69 +2,75 @@ import cv2
 import numpy as np
 
 
-def verify_parallel_edges(edges, approx):
-    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=30, maxLineGap=10)
+cap = cv2.VideoCapture(0)
 
-    if lines is None:
-        return False
+def draw_grid(frame, x, y, levels):
 
-    angles = []
-    for line in lines:
-        x1, y1, x2, y2 = line[0]
-        angle = np.arctan2(y2 - y1, x2 - x1) * 180 / np.pi
-        angles.append(angle)
+    # print(frame.shape[0]) # 480
+    # print(frame.shape[1]) # 640
+    # ___________ y
+    # |
+    # |
+    # |
+    # |
+    # x
+    start_x = 245
+    end_x = 400
+    start_y = 250
+    end_y = 375
 
-    # Sort angles into horizontal & vertical groups
-    horizontal = [a for a in angles if -10 < a < 10 or 170 < a < 190]
-    vertical = [a for a in angles if 80 < a < 100]
+    cv2.line(frame, (start_x, x), (start_x, end_x), color=(255, 0, 255), thickness=1)
+    cv2.line(frame, (start_x+x, x), (start_x+x, end_x), color=(255, 0, 255), thickness=1)
+    cv2.line(frame, (start_x+2*x, x), (start_x+2*x, end_x), color=(255, 0, 255), thickness=1)
+    cv2.line(frame, (start_x+3*x, x), (start_x+3*x, end_x), color=(255, 0, 255), thickness=1)
 
-    return len(horizontal) >= 2 and len(vertical) >= 2  # Ensure at least 2 parallel lines
+    # for i in range(levels):
 
-
-def detect_jenga_blocks(frame):
-    # Convert to grayscale
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-    
-    # Canny Edge Detection
-    edges = cv2.Canny(blurred, 50, 150)
-
-    # Find contours
-    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
-    jenga_blocks = []
-    
-    for cnt in contours:
-        hull = cv2.convexHull(cnt)  # Get convex hull (better for distorted shapes)
-        approx = cv2.approxPolyDP(hull, 0.02 * cv2.arcLength(hull, True), True)  
-
-        # Check if it's a quadrilateral (rectangle or trapezium)
-        if len(approx) == 4:
-            x, y, w, h = cv2.boundingRect(approx)
-            area = cv2.contourArea(approx)
-
-            # Apply size filtering (Remove small/noisy contours)
-            if 1000 < area < 20000:  
-                # Apply Hough Line Transform to verify it's a structured block
-                if verify_parallel_edges(edges, approx):
-                    jenga_blocks.append((x, y, w, h))
-                    cv2.polylines(frame, [approx], True, (0, 255, 0), 2)
-                    cv2.putText(frame, "Jenga Block", (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-    return frame, jenga_blocks
+    cv2.line(frame, (start_y, y + end_y), (end_x, y + end_y), color=(255, 0, 255),thickness=1)
 
 
-cap = cv2.VideoCapture(2)  # Change to 3 if needed
+
 
 while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
+    
+    ret, image = cap.read()
+    
+    # b & w
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    processed_frame, jenga_blocks = detect_jenga_blocks(frame)
+    # gaussian blur
+    blur = cv2.GaussianBlur(gray, (5,5), 0)
 
-    # Display the result
-    cv2.imshow("Jenga Detection (Stable)", processed_frame)
+
+    thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+    # cv2.imshow("thresh", thresh)
+
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+
+    for contour in contours:
+        # Get bounding rectangle around the contour 
+        x, y, w, h = cv2.boundingRect(contour)
+        
+        # Ensure the detected region is approximately 50x50 pixels (small "X" shape)
+        if 30 < w < 60 and 30 < h < 60:
+            aspect_ratio = w / float(h)  # Should be close to 1 for square-like "X"
+            area = cv2.contourArea(contour)
+            perimeter = cv2.arcLength(contour, True)
+            compactness = (4 * np.pi * area) / (perimeter ** 2) if perimeter > 0 else 0  # Shape similarity score
+
+            # Confidence Check: Ensure shape is square-like and compact
+            confidence = (1.0 - abs(aspect_ratio - 1)) * compactness
+            if confidence > 0.65:
+                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Draw green rectangle
+                cv2.putText(image, f"X Detected ({confidence:.2f})", (x, y - 10), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+
+    cv2.imshow("Threshold", thresh)
+    cv2.imshow("X Detection", image)
+
+
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

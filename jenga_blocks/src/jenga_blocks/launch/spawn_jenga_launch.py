@@ -34,12 +34,12 @@ def deploy_jenga_blocks(ld, block_file, use_sim_time, stacked=False):
             for j in range(blocks_per_layer):
 
                 if rotate:
-                    x_position = (j - 1) * block_spacing
+                    x_position = (j - 1) * block_spacing + 0.4
                     y_position = 0
                     z_position = layer_height
                     yaw_rotation = 1.57
                 else:
-                    x_position = 0
+                    x_position = 0.4
                     y_position = (j - 1) * block_spacing
                     z_position = layer_height
                     yaw_rotation = 0
@@ -118,12 +118,12 @@ def deploy_jenga_base(base_file, use_sim_time):
                         '-topic', '/robot_description',
                         # '-file', base_file,
                         '-entity', 'base',
-                        '-x', '0',
-                        '-y', '0',
+                        '-x', '0.4',
+                        '-y', '0.0',
                         '-z', '0.03',
-                        '-R', '0',
-                        '-P', '0',
-                        '-Y', '0'
+                        '-R', '0.0',
+                        '-P', '0.0',
+                        '-Y', '0.0'
                     ],
                     output='screen'
                 )
@@ -142,6 +142,8 @@ def launch_gazebo():
         ),
     )
     return gazebo
+        
+ 
 
 def generate_launch_description():
     pkg_name = 'jenga_blocks'
@@ -151,12 +153,14 @@ def generate_launch_description():
     yaml_file_path = os.path.join(get_package_share_directory(pkg_name),'config','base_controllers.yaml')
 
     
+
     ld = LaunchDescription()
     use_sim_time = LaunchConfiguration('use_sim_time')
     ust = DeclareLaunchArgument('use_sim_time', default_value='false', description='Use sim time if true')
     ld.add_action(ust)
 
-    
+
+
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory(pkg_name), 'launch', 'rsp_launch.py'
@@ -180,7 +184,6 @@ def generate_launch_description():
         output='screen'
     )
     ld.add_action(controller_manager)
-
 
     gazebo = launch_gazebo()
     ld.add_action(gazebo)

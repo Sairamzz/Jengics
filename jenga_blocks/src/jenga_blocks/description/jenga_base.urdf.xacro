@@ -9,11 +9,11 @@
         <color rgba="0 1 0 1"/>
     </material>
 
-    <link name="base_link" />
+    <link name="world" />
 
     <joint name="base_joint" type="fixed">
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <parent link="base_link"/>
+        <parent link="world"/>
         <child link="jenga_base_link"/>
     </joint>
 
@@ -21,7 +21,7 @@
         <visual>
             <origin xyz="0 0 0" />
             <geometry>
-                <box size="0.75 0.75 0.05"/>
+                <box size="0.25 0.25 0.05"/>
             </geometry>
             <material name="red" />
         </visual>
@@ -29,7 +29,7 @@
         <collision>
             <origin xyz="0 0 0" />
             <geometry>
-                <box size="0.75 0.75 0.05"/>
+                <box size="0.25 0.25 0.05"/>
             </geometry>
         </collision>
 
@@ -71,24 +71,68 @@
     </link>
 
     <gazebo reference="jenga_base_link">
-        <material>Gazebo/Red</material>
-        <gravity>true</gravity>
-        <mu1>0.7</mu1>
-        <mu2>0.7</mu2>
-        <!-- <dampingFactor>0.7</dampingFactor> -->
-        <kp>50000</kp> <!--contact stiffness -->
-        <kd>5000</kd> <!-- contact damping -->
+    <material>Gazebo/Red</material>
+    <gravity>true</gravity>
+
+    <surface>
+        <friction>
+        <ode>
+            <mu>1.2</mu>
+            <mu2>1.2</mu2>
+            <fdir1>0 0 0</fdir1>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+        </ode>
+        </friction>
+        <bounce>
+        <restitution_coefficient>0.0</restitution_coefficient>
+        <threshold>1.0</threshold>
+        </bounce>
+        <contact>
+        <ode>
+            <soft_cfm>0.00001</soft_cfm>
+            <soft_erp>0.2</soft_erp>
+            <kp>100000</kp>
+            <kd>5000</kd>
+            <max_vel>0.01</max_vel>
+            <min_depth>0.001</min_depth>
+        </ode>
+        </contact>
+    </surface>
     </gazebo>
 
 
     <gazebo reference="jenga_rotator_link">
         <material>Gazebo/Green</material>
         <gravity>true</gravity>
-        <mu1>0.8</mu1>
-        <mu2>0.8</mu2>
-        <kp>50000</kp>
-        <kd>5000</kd>
+
+        <surface>
+            <friction>
+                <ode>
+                    <mu>1.2</mu>
+                    <mu2>1.2</mu2>
+                    <fdir1>0 0 0</fdir1>
+                    <slip1>0.0</slip1>
+                    <slip2>0.0</slip2>
+                </ode>
+            </friction>
+            <bounce>
+                <restitution_coefficient>0.0</restitution_coefficient>
+                <threshold>1.0</threshold>
+            </bounce>
+            <contact>
+                <ode>
+                    <soft_cfm>0.00001</soft_cfm>
+                    <soft_erp>0.2</soft_erp>
+                    <kp>10000</kp>
+                    <kd>5000</kd>
+                    <max_vel>0.01</max_vel>
+                    <min_depth>0.001</min_depth>
+                </ode>
+            </contact>
+        </surface>    
     </gazebo>
+
     
 
 

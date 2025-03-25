@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="jenga_world">
+
+    <!-- Physics Configuration for Stability -->
+    <physics name="default_physics" type="ode">
+      <max_step_size>0.001</max_step_size> <!-- Smaller step for better stability -->
+      <real_time_update_rate>1000</real_time_update_rate> <!-- Smooth simulation -->
+      <solver>
+        <iters>200</iters> <!-- More iterations for better stacking -->
+        <sor>1.3</sor>
+      </solver>
+    </physics>
+
+    <!-- Ground Plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Sun Light -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Jenga Tower Model -->
+    <model name="jenga_tower">
+      <static>1</static> <!-- Set to 1 if testing placement -->
+      
+      <!-- Layer 1 -->
+      <model name="layer_1_block_1">
+        <pose>0 -0.0251 0 0 0 0</pose>  <!-- Slightly move left -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_1_block_2">
+        <pose>0 0 0 0 0 0</pose>       <!-- Center block -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_1_block_3">
+        <pose>0 0.0251 0 0 0 0</pose>   <!-- Slightly move right -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <!-- Layer 2 -->
+      <model name="layer_2_block_1">
+        <pose>-0.0251 0 0.019 0 0 1.5708</pose>  <!-- Slightly move forward -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_2_block_2">
+        <pose>0 0 0.019 0 0 1.5708</pose>       <!-- Center block -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_2_block_3">
+        <pose>0.0251 0 0.019 0 0 1.5708</pose>   <!-- Slightly move backward -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <!-- Layer 3 -->
+      <model name="layer_3_block_1">
+        <pose>0 -0.0251 0.038 0 0 0</pose>  <!-- Slightly move left -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_3_block_2">
+        <pose>0 0 0.038 0 0 0</pose>       <!-- Center block -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_3_block_3">
+        <pose>0 0.0251 0.038 0 0 0</pose>   <!-- Slightly move right -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <!-- Layer 4 -->
+      <model name="layer_4_block_1">
+        <pose>-0.0251 0 0.057 0 0 1.5708</pose>  <!-- Slightly move forward -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_4_block_2">
+        <pose>0 0 0.057 0 0 1.5708</pose>       <!-- Center block -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_4_block_3">
+        <pose>0.0251 0 0.057 0 0 1.5708</pose>   <!-- Slightly move backward -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <!-- Layer 5 -->
+      <model name="layer_5_block_1">
+        <pose>0 -0.0251 0.076 0 0 0</pose>  <!-- Slightly move left -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_5_block_2">
+        <pose>0 0 0.076 0 0 0</pose>       <!-- Center block -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_5_block_3">
+        <pose>0 0.0251 0.076 0 0 0</pose>   <!-- Slightly move right -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <!-- Layer 6 -->
+      <model name="layer_6_block_1">
+        <pose>-0.0251 0 0.095 0 0 1.5708</pose>  <!-- Slightly move forward -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_6_block_2">
+        <pose>0 0 0.095 0 0 1.5708</pose>       <!-- Center block -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+      <model name="layer_6_block_3">
+        <pose>0.0251 0 0.095 0 0 1.5708</pose>   <!-- Slightly move backward -->
+        <include>
+          <uri>model://jenga_block</uri>
+        </include>
+      </model>
+
+
+
+
+
+      <!-- Fixed Joints to Hold Blocks in Place Initially -->
+      <joint name="layer1_joint_1" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_1_block_1</child>
+      </joint>
+      <joint name="layer1_joint_2" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_1_block_2</child>
+      </joint>
+      <joint name="layer1_joint_3" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_1_block_3</child>
+      </joint>
+
+      <joint name="layer2_joint_1" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_2_block_1</child>
+      </joint>
+      <joint name="layer2_joint_2" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_2_block_2</child>
+      </joint>
+      <joint name="layer2_joint_3" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_2_block_3</child>
+      </joint>
+
+      <joint name="layer3_joint_1" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_3_block_1</child>
+      </joint>
+      <joint name="layer3_joint_2" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_3_block_2</child>
+      </joint>
+      <joint name="layer3_joint_3" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_3_block_3</child>
+      </joint>
+
+      <joint name="layer4_joint_1" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_4_block_1</child>
+      </joint>
+      <joint name="layer4_joint_2" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_4_block_2</child>
+      </joint>
+      <joint name="layer4_joint_3" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_4_block_3</child>
+      </joint>
+
+      <joint name="layer5_joint_1" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_5_block_1</child>
+      </joint>
+      <joint name="layer5_joint_2" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_5_block_2</child>
+      </joint>
+      <joint name="layer5_joint_3" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_5_block_3</child>
+      </joint>
+
+      <joint name="layer6_joint_1" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_6_block_1</child>
+      </joint>
+      <joint name="layer6_joint_2" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_6_block_2</child>
+      </joint>
+      <joint name="layer6_joint_3" type="fixed">
+        <parent>jenga_tower</parent>
+        <child>layer_6_block_3</child>
+      </joint>
+
+
+    </model>
+  </world>
+</sdf>
