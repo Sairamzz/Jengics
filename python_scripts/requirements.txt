@@ -3,3 +3,5 @@ opencv-python
 pygame
 PyOpenGL
 pupil-apriltags
+transforms3d
+scipy

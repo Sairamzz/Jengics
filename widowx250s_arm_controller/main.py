@@ -1,9 +1,12 @@
 from arm_control import IKClient, Wx250sArmController, Wx250sGripperController
 from arm_control import compute_rpy_from_xyz, compute_rpy_with_fixed_axis, compute_rpy, compute_quaternion
 
+from get_april_tag_coords import get_coords
+
 import numpy as np
 import tf_transformations as tf
 
+import cv2
 import rclpy
 
 
@@ -47,7 +50,17 @@ def main():
 
 
     # set variables (const)
-    x, y, z = 0.38, 0.025, 0.23
+    x, y, z = 0.30, 0.025, 0.23
+
+    cap = cv2.VideoCapture(0)
+    _, frame = cap.read()
+
+    try:
+        x,y,z = get_coords(frame, 13)
+        print(x, y, z)
+    except:     
+        pass
+
     qx, qy, qz, qw = 0.0, 0.0, 0.0, 1.0
     gripper_val = 0.02 # 0.035 to open, 0.0 to close
 
