@@ -8,16 +8,16 @@ import numpy as np
 
 # TODO: assign actual camera intrinsic values through calibration
 # Define camera intrinsic parameters (modify these for your camera)
-camera_matrix = np.array([[526.86714797,   0. ,        323.39162405],
- [  0.        , 529.07894094 ,248.38204922],
- [  0.         ,  0.       ,    1.        ]], dtype=np.float32)  # 0, 0, 1
+camera_matrix = np.array( [[1.50741073e+03, 0.00000000e+00, 4.72696241e+02],
+ [0.00000000e+00, 1.51427107e+03, 2.29899503e+02],
+ [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]]
+, dtype=np.float32)  # 0, 0, 1
 
- 
-dist_coeffs =  np.array([[-1.36932426e-01,  1.77715703e+00,  2.62413066e-03,  5.40483909e-03, -4.81047475e+00]])
-# np.zeros(4)  # Assuming no lens distortion
+# dist_coeffs = np.zeros(4)  # Assuming no lens distortion
+dist_coeffs =  np.array( [[ 1.73271390e-01,  1.91603494e+00,  2.20351447e-03,  2.70285791e-02, -9.45373992e+00]])
 
-# Define the real-world size of the AprilTag (modify according to your tag size in meters)
-tag_size = 0.05  # 5 cm x 5 cm
+# TODO: "DONE" use actual tags size here
+tag_size = 0.095
 
 # TODO: use actual tags size here
 # Define the 3D points of the AprilTag corners in its local coordinate frame
@@ -30,7 +30,7 @@ obj_points = np.array([
 
 
 detector = Detector(families='tag25h9')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 while True:
     ret, frame = cap.read()

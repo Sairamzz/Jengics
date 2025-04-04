@@ -4,11 +4,11 @@ import glob
 import os
 
 # === Parameters ===
-CHECKERBOARD = (8, 6)        # Number of inner corners
-SQUARE_SIZE = 0.03          # Size of one square in meters (e.g., 2.5 cm)
+CHECKERBOARD = (9, 6)        # Number of inner corners
+SQUARE_SIZE = 0.019          # Size of one square in meters
 
 # === Paths ===
-IMAGE_DIR = "checkerboard_images"
+IMAGE_DIR = "checkerboard_images_hp_laptop"
 IMAGE_PATTERN = os.path.join(IMAGE_DIR, "*.jpg")
 
 # === Storage ===

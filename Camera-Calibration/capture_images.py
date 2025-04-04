@@ -2,7 +2,7 @@ import cv2
 import os
 
 # === Parameters ===
-SAVE_DIR = "checkerboard_images"
+SAVE_DIR = "checkerboard_images_hp_laptop"
 CAMERA_ID = 0  # Default webcam
 
 # Create folder if it doesn't exist

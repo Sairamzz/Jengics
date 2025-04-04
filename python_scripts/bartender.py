@@ -71,8 +71,9 @@ def main():
     bot.arm.set_ee_pose_components(x=0.35, z=0.05)
 
     
-
-    # bot.arm.go_to_home_pose()
+    bot.gripper.release()
+    bot.arm.go_to_home_pose()
+    bot.gripper.grasp()
     # bot.arm.go_to_sleep_pose()
 
     robot_shutdown()

@@ -1,13 +1,15 @@
 from arm_control import IKClient, Wx250sArmController, Wx250sGripperController
-from arm_control import compute_rpy_from_xyz, compute_rpy_with_fixed_axis, compute_rpy, compute_quaternion
-
-from get_april_tag_coords import get_coords
+from arm_control import compute_rpy_from_xyz
 
 import numpy as np
 import tf_transformations as tf
 
+import time
+
 import cv2
 import rclpy
+
+from detect_april_tags import get_tag_coords
 
 
 class WidowX250s(Wx250sArmController, Wx250sGripperController):
@@ -19,7 +21,7 @@ class WidowX250s(Wx250sArmController, Wx250sGripperController):
             rclpy.spin_once(self)
             print("Waiting for valid joint state...")
 
-    def execute_target(self, xyz, quaternion, movement_time=2, velocity=None, acceleration=None, gripper_val=None):
+    def execute_target(self, xyz, quaternion=[0.0, 0.0, 0.0, 1.0], movement_time=2, velocity=[0.5] * 6, acceleration=[0.1] * 6, gripper_val=None):
         velocity = velocity or [0.5] * 6
         acceleration = acceleration or [0.1] * 6
 
@@ -30,11 +32,12 @@ class WidowX250s(Wx250sArmController, Wx250sGripperController):
             print("IK computation failed. Skipping this target ", target_position)
             return
 
-        self.set_parameters(target_position, movement_time, velocity, acceleration)
-        self.move_to_target()
-
         if gripper_val is not None:
             self.move_gripper(gripper_val, -gripper_val)
+            print("yey send gripper")
+
+        self.set_parameters(target_position, movement_time, velocity, acceleration)
+        self.move_to_target()
 
         rclpy.spin_once(self)
 
@@ -50,19 +53,27 @@ def main():
 
 
     # set variables (const)
-    x, y, z = 0.30, 0.025, 0.23
+    x, y, z = 0.3, 0.0, 0.1
+    
+    # x BELOW 0.3 IS RISKY
+    
+    
+    # x, y, z = get_tag_coords(arm_control)
 
-    cap = cv2.VideoCapture(0)
-    _, frame = cap.read()
+    # cap.release()
 
-    try:
-        x,y,z = get_coords(frame, 13)
-        print(x, y, z)
-    except:     
-        pass
+    # print()
+    # print("x" + str(x))
+    # print("y" + str(y))
+    # print("z" + str(z))
+    # print()
+
 
     qx, qy, qz, qw = 0.0, 0.0, 0.0, 1.0
-    gripper_val = 0.02 # 0.035 to open, 0.0 to close
+    
+    # x, y, z, qx, qy, qz, qw = sleep_pose()
+
+    gripper_val = 0.035 # 0.035 to open, 0.0 to close
 
     # x, y, z, qx, qy, qz, qw = sleep_pose()
     
@@ -76,9 +87,10 @@ def main():
         quaternion=[qx, qy, qz, qw], 
         movement_time=movement_time, 
         velocity=velocity,
-        acceleration=acceleration, 
-        gripper_val=gripper_val # Optional: Set None if you don't want to move gripper
+        acceleration=acceleration,
+        gripper_val=0.02
     )
+        
 
     rclpy.shutdown()
     

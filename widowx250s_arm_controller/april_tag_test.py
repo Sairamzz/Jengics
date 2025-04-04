@@ -3,12 +3,14 @@ from pupil_apriltags import Detector
 import numpy as np
 
 # TODO: "DONE" assign actual camera intrinsic values through calibration
-camera_matrix = np.array([[526.86714797,   0. ,        323.39162405],
- [  0.        , 529.07894094 ,248.38204922],
+camera_matrix = np.array([[800.34154022,   0. ,        330.068031],
+ [  0.        , 801.58117864 ,270.23508093],
  [  0.         ,  0.       ,    1.        ]], dtype=np.float32)  # 0, 0, 1
 
+
+
 # dist_coeffs = np.zeros(4)  # Assuming no lens distortion
-dist_coeffs =  np.array([[-1.36932426e-01,  1.77715703e+00,  2.62413066e-03,  5.40483909e-03, -4.81047475e+00]])
+dist_coeffs =  np.array([[-3.27782913e-03,  1.50646740e+00,  2.47993711e-03, -7.50227307e-03, -5.82926301e+00]])
 
 # Define the real-world size of the AprilTag (modify according to your tag size in meters)
 tag_size = 0.01
@@ -25,7 +27,7 @@ obj_points = np.array([
 # CAM_DISTANCE_FROM_ARM = 0.06 # meters
 
 detector = Detector(families='tag25h9')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 while True:
     ret, frame = cap.read()
@@ -57,9 +59,9 @@ while True:
             xr, yr, zr = z, -x, -y
 
             print()
-            print("x" + str(x))
-            print("y" + str(y))
-            print("z" + str(z))
+            print("x" + str(xr))
+            print("y" + str(yr))
+            print("z" + str((zr + 0.13) * 2))
             print()
             
 
@@ -84,5 +86,6 @@ cap.release()
 cv2.destroyAllWindows()
 
 
-
+# min z is -0.13
+# max z is 0.14
 
