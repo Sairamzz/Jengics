@@ -3,12 +3,23 @@ from pupil_apriltags import Detector
 
 import numpy as np
 import time
+import pyttsx3
 
 from actuator_functions import push, pick, place
 
 from camera_intrinsic import camera_matrix, dist_coeffs, obj_points, CAMERA_MODE
 
+def speak(text):
+    engine = pyttsx3.init()
 
+    # Get available voices
+    voices = engine.getProperty('voices')
+
+    # Set voice to index 1 (usually female)
+    engine.setProperty('voice', voices[1].id)
+
+    engine.say(text)
+    engine.runAndWait()
 
 def get_tag_coords(bot):
     detector = Detector(families='tag25h9')
@@ -25,6 +36,8 @@ def get_tag_coords(bot):
     goal_x = None
     goal_y = None
     goal_z = None
+
+    engine = pyttsx3.init()
 
     while not cv2.waitKey(1) & 0xFF == ord('q'):
         # print(pushed)
@@ -173,7 +186,7 @@ def get_tag_coords(bot):
                     goal_x = 0.35
                     #z + 0.1
                     goal_y = x - 0.028
-                    goal_z = -y + 0.137 - 0.025
+                    goal_z = -y + 0.137 - 0.035
 
                     if goal_x < 0.3: 
                         goal_x = 0.3
@@ -192,6 +205,7 @@ def get_tag_coords(bot):
         if key == ord('p') and goal_x:
             pushed = True
             push(bot, goal_x, goal_y, goal_z, selected_tag_id)
+            speak("Please Rotate the Base mf!")
             print(f"Pushing: {selected_tag_id}")
             
         
@@ -201,6 +215,7 @@ def get_tag_coords(bot):
 
         if key == ord('i') and goal_x:
             place(bot, goal_x, goal_y, goal_z)
+            speak("Please Rotate back the Base mf!")
         
         if key == ord('s'):
             bot.arm.go_to_sleep_pose()

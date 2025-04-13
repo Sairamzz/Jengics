@@ -31,6 +31,7 @@ def pick(bot, goal_x, goal_y, goal_z):
     bot.gripper.grasp(1)
     bot.gripper.set_pressure(1.0)
 
+    
     bot.arm.set_ee_pose_components(x=goal_x - 0.06, y=goal_y, z=goal_z, roll=np.pi/2, pitch=0.0, yaw=0.0, blocking=True)
 
     # bot.arm.set_ee_pose_components(x=goal_x - 0.06, y=goal_y, z=goal_z, roll=0.0, pitch=0.0, yaw=0.0, blocking=True)
@@ -40,7 +41,7 @@ def pick(bot, goal_x, goal_y, goal_z):
 
 # place on top picked piece
 def place(bot, goal_x, goal_y, goal_z):
-    place_dist = 0.1
+    place_dist = 0.05
     height_gain = 0.13
     bot.arm.set_ee_pose_components(x=goal_x, y=goal_y, z=goal_z + height_gain, roll=np.pi/2, pitch=0.0, yaw=0.0, blocking=True)
     bot.arm.set_ee_pose_components(x=goal_x + place_dist, y=goal_y, z=goal_z + height_gain, roll=np.pi/2, pitch=0.0, yaw=0.0, blocking=True)

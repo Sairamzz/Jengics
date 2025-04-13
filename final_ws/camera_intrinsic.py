@@ -32,4 +32,4 @@ obj_points = np.array([
     [-tag_size / 2,  tag_size / 2, 0]   # Top-left
 ], dtype=np.float32)
 
-CAMERA_MODE = 1 # 0 for hp envy, 2 or 1 for Zhi Tan's camera
+CAMERA_MODE = 4 # 0 for hp envy, 2 or 1 for Zhi Tan's camera 4 in Sairam's laptop
