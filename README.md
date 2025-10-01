@@ -1,33 +1,60 @@
 # Jengics
 
-# Packages manual below
-## jenga_blocks
-It contains 2 packages 
-- jenga_blocks
-This command will pile up the jenga stack and the base as well you can open the `spawn_jenga_launch.py` to manually change whether to make blocks spawn randomly or in jenga format
-It also launches ros2 controllers through which you can rotate a base by writing your own script
-```bash
-ros2 launch jenga_blocks spawn_jenga_launch.py
-```
+This project was done as a part of the CS 5335 (Robotics Science and Systems) course at Northeastern University.
 
-- jenga_bot
-Well I was trying to run the widow x250s arm using this, it works but the issue is we cant import those controller codes which gazebo needs to acces each joint in arm so no use of this actually
-```bash
-ros2 launch jenga_bot spawn_launch.py
-```
+* [Objectives](#Objectives)
+* [Features](#Features)
+* [Implementaion](#Implementaion)
+* [Results](#Results)
+* [Contributors](#Contributors)
+* [RobotArm](#RobotArm)
 
-## jenga_project
-It contains 2 sub folders
-- packages (it has those github packages)
+## Objectives:
+The goal of this project was to develop a robotic system capable of playing Jenga by autonomously identifying, selecting, extracting, and repositioning blocks without causing the tower to collapse. Unlike traditional pick-and-place tasks, Jenga presents unique challenges in precision, force control, and adaptability under real-world physical constraints.
 
-- project_ws
-This is where we find sorted folders for each thing to do with the arm
-We referred this link here -> https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros2_packages.html
+The objective was to design and integrate a complete system—perception, planning, and manipulation—using an Interbotix WidowX 250s robot arm, custom hardware, and vision-based detection methods, in order to demonstrate the feasibility of fine robotic manipulation in constrained environments.
 
-The `project_ws` has `dom.txt` which stands for DOCUMENT OBJECT MODEL (idk this name suited more :|)  it has the structure of ros2 packages inside it
-`packages.txt` has list of GitHub packages required (at minimum) to run a bot either simulation or real bot
+## Features:
+This robotic system combines real-time vision, motion planning, and manipulation strategies to tackle the complexities of Jenga. 
 
-If you'd like to run the bot refer these websites
+- Each block in the tower was labeled with a unique AprilTag, which enabled reliable block detection and pose estimation using a Logitech C270 webcam and OpenCV’s solvePnP function.
+- The system employed ROS2 and MoveIt for inverse kinematics, ensuring precise control of the WidowX 250s arm and its custom 3D-printed gripper.
+- To extend workspace accessibility, a manually operated rotating base was introduced, allowing the robot to interact with blocks on all sides of the tower.
+- Additional features included modular ROS2 controllers for the arm and gripper, as well as text-to-speech prompts for human-robot interaction during the manipulation sequence.
+
+## Implementaion:
+
+- The system was built around the Interbotix WidowX 250s robotic arm, controlled via ROS2 and MoveIt for trajectory execution.
+- Perception was handled by a webcam-based vision pipeline that identified AprilTags on the blocks, estimated their 3D poses, and transformed them into the robot’s base frame for accurate positioning.
+
+The manipulation strategy followed a three-step process: push, pick, and place.
+- The robot first pushed the block outward, then after the tower was rotated on the base, it grasped the block and placed it on top of the stack. ROS2 nodes were developed for arm and gripper control, enabling joint trajectory publishing and real-time actuation.
+
+A custom gripper was iteratively designed and refined to allow precise interaction with the narrow gaps between Jenga blocks. User interaction during demonstrations was facilitated by keyboard commands that triggered each manipulation phase, alongside auditory prompts from the robot to guide tower rotation.
+
+<img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/73bc7823-99c3-4cf3-8eb9-303ab830ca74" />
+
+(Environment Setup)
+
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/8c20bb12-5bf1-46d1-88d3-8d61c0a155c1" />
+
+(Jenga Tower)
+
+## Results:
+
+The Jenga-playing robot successfully demonstrated the ability to extract and reposition blocks from the tower under real-world constraints. Experiments showed reliable block detection, stable manipulation, and repeatable task execution, validating the integration of perception, planning, and control modules. Despite limitations such as the restricted reach of the WidowX 250s, reliance on manual rotation of the tower, and the low resolution of the webcam, the system achieved its primary objective. 
+
+(Will add videos)
+
+## Contributors
+- [Sairam Sridharan](https://github.com/Sairamzz)
+- [Rituraj Navindgikar]
+- [Reem Almazroa]
+- [Alay Shah]
+
+## RobotArm:
+
+If you'd like to run the trossen robotics' bot refer these websites:
 
 [Arm Description](https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros2_packages/arm_descriptions.html)
 [Arm Control](https://docs.trossenrobotics.com/interbotix_xsarms_docs/ros2_packages/arm_control.html)
