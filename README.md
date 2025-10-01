@@ -6,7 +6,6 @@ This project was done as a part of the CS 5335 (Robotics Science and Systems) co
 * [Features](#Features)
 * [Implementaion](#Implementaion)
 * [Results](#Results)
-* [Final Working Video](#FinalWorkingVideo)
 * [Contributors](#Contributors)
 * [RobotArm](#RobotArm)
 
