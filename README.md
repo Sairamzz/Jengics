@@ -45,11 +45,11 @@ A custom gripper was iteratively designed and refined to allow precise interacti
 
 The Jenga-playing robot successfully demonstrated the ability to extract and reposition blocks from the tower under real-world constraints. Experiments showed reliable block detection, stable manipulation, and repeatable task execution, validating the integration of perception, planning, and control modules. Despite limitations such as the restricted reach of the WidowX 250s, reliance on manual rotation of the tower, and the low resolution of the webcam, the system achieved its primary objective. 
 
-### We Initially Hard-coded to conceptualize how it should work
+## We Initially Hard-coded to conceptualize how it should work
 
 https://github.com/user-attachments/assets/16d30041-4d4a-48c0-81ad-9393f4f4ff36
 
-### Final Working Video
+## Final Working Video
 
 https://github.com/user-attachments/assets/e708a22d-34af-4f8b-afca-50bff3af8164
 
